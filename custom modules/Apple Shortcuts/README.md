@@ -2,6 +2,51 @@
 
 A Chataigne custom module based on the `OS` module that triggers macOS Apple Shortcuts (`/usr/bin/shortcuts`) non-blocking and returns results as a JSON payload over WebSocket.
 
+## Architecture
+
+```
+Chataigne (Apple Shortcuts / OS Module)
+  │  local.launchProcess(fullCmd, 0)  [non-blocking background thread]
+  ▼
+/usr/bin/python3  (hex-encoded bootstrap & packed args)
+  ├──▶ /usr/bin/shortcuts run / list  (temp files for --input-path / --output-path)
+  │         └── captures stdout / output file & parses JSON if valid
+  └──▶ RFC-6455 WebSocket client (stdlib socket)
+            └── sends JSON text frame + Close frame (0x88)
+                  ▼
+Chataigne (WebSocket Server, Protocol: JSON)
+  └── parses JSON into live Chataigne Values
+```
+
+1. **Non-blocking execution**: `shortcuts.js` calls `local.launchProcess(..., 0)` so `OSModule` runs shortcuts on its background thread without pausing Chataigne's UI.
+2. **Shell-free `ChildProcess` invocation**: JUCE's `ChildProcess::start()` tokenizes commands without a shell and passes tokens directly to `execvp`. Arguments (`action`, `shortcutName`, `wsUrl`, `inputText`) are hex-encoded and pipe-delimited (`|`) so empty fields never shift `sys.argv` indices.
+3. **WebSocket return**: Python sends the JSON payload over a local WebSocket connection (using only Python's standard library) followed by a masked RFC-6455 Close frame.
+
+## Requirements: Python 3 & Xcode Command Line Tools
+
+`shortcuts.js` invokes `/usr/bin/python3` and uses **only Python 3 standard-library modules** (no `pip` packages needed).
+
+### Option A: Install Xcode Command Line Tools (macOS default `/usr/bin/python3`)
+On macOS, `/usr/bin/python3` is provided by **Xcode Command Line Tools** (full Xcode is not required):
+
+```bash
+xcode-select --install
+```
+
+If you previously had full `Xcode.app` installed and later uninstalled it, point `xcode-select` to Command Line Tools:
+
+```bash
+sudo xcode-select --switch /Library/Developer/CommandLineTools
+```
+
+### Option B: Use a Custom Python 3 Path
+If you prefer a different Python 3 installation (e.g. Homebrew `/opt/homebrew/bin/python3` or python.org `/Library/Frameworks/Python.framework/Versions/Current/bin/python3`), update `/usr/bin/python3` in `shortcuts.js` (`executeShortcutsAction`):
+
+```js
+var fullCmd = "/opt/homebrew/bin/python3 -c exec(bytes.fromhex('" + bootHex + "').decode()) "
+	+ pyHex + " " + argsPacked;
+```
+
 ## Installation
 
 Symlink or copy this folder into Chataigne's custom modules directory:
