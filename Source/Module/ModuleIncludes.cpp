@@ -91,6 +91,11 @@
 #include "modules/controller/ajazz/AjazzModule.cpp"
 #include "modules/controller/ajazz/commands/AjazzCommand.cpp"
 
+#include "modules/controller/uvc/UVCDevice.cpp"
+#include "modules/controller/uvc/UVCManager.cpp"
+#include "modules/controller/uvc/UVCModule.cpp"
+#include "modules/controller/uvc/commands/UVCCommand.cpp"
+
 #include "modules/controller/loupedeck/LoupedeckShape.cpp"
 #include "modules/controller/loupedeck/LoupedeckShapeManager.cpp"
 #include "modules/controller/loupedeck/LoupedeckModule.cpp"

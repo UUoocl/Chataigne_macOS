@@ -47,6 +47,7 @@ ModuleFactory::ModuleFactory() {
 	defs.add(new ModuleDefinition("Hardware", "Gamepad", &GamepadModule::create));
 	//defs.add(new ModuleDefinition("Hardware", "Joystick", &JoystickModule::create));
 	defs.add(new ModuleDefinition("Hardware", "Stream Deck", &StreamDeckModule::create));
+	defs.add(new ModuleDefinition("Hardware", "UVC Camera", &UVCModule::create));
 	defs.add(new ModuleDefinition("Hardware", "Ajazz AKP", &AjazzModule::create));
 	defs.add(new ModuleDefinition("Hardware", "Loupedeck", &LoupedeckModule::create));
 	defs.add(new ModuleDefinition("Hardware", "GPIO", &GPIOModule::create));

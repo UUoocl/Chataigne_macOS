@@ -97,6 +97,12 @@
 #include "modules/controller/ajazz/AjazzModule.h"
 #include "modules/controller/ajazz/commands/AjazzCommand.h"
 
+#include "modules/controller/uvc/UVCBridge.h"
+#include "modules/controller/uvc/UVCDevice.h"
+#include "modules/controller/uvc/UVCManager.h"
+#include "modules/controller/uvc/UVCModule.h"
+#include "modules/controller/uvc/commands/UVCCommand.h"
+
 
 #include "modules/controller/wiimote/WiimotePairUtil.h"
 #include "modules/controller/wiimote/WiimoteManager.h"

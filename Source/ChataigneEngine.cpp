@@ -114,6 +114,7 @@ ChataigneEngine::~ChataigneEngine()
 
 	InputSystemManager::deleteInstance();
 	StreamDeckManager::deleteInstance();
+	UVCManager::deleteInstance();
 
 
 	ChataigneAssetManager::deleteInstance();
