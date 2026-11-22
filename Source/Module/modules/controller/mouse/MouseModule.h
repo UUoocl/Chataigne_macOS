@@ -10,6 +10,10 @@
 
 #pragma once
 
+#if JUCE_MAC
+namespace mousemac { class MacMouseButtonTap; }
+#endif
+
 class MouseModule :
 	public Module,
 #if JUCE_WINDOWS
@@ -41,6 +45,10 @@ public:
 	Trigger* wheelXData;
 	BoolParameter* extraButton1;
 	BoolParameter* extraButton2;
+#if JUCE_MAC
+	ControllableContainer macExtraButtonsCC;
+	Array<BoolParameter*> macExtraButtons;
+#endif
 
 
 	void setCursorPosition(Point<float>& pos, bool isRelative);
@@ -49,14 +57,18 @@ public:
 	void setButtonUp(int buttonID);
 	void setButtonClick(int buttonID);
 
-	void sendButtonEvent(int buttonEvent);
+	void sendButtonEvent(int buttonEvent, int buttonNumber = -1);
 
 
 #if JUCE_WINDOWS
 	void mouseButtonChanged(int button, bool pressed);
 	void mouseWheelChanged(int wheelDelta, bool horizontal) override;
 #else
-
+#if JUCE_MAC
+	void macMouseButtonChanged(int buttonNumber, bool pressed);
+	std::unique_ptr<mousemac::MacMouseButtonTap> macButtonTap;
+	bool macButtonTapActive = false;
+#endif
 	void mouseDown(const MouseEvent& e) override;
 	void mouseUp(const MouseEvent& e) override;
 	void mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& d) override;
@@ -77,4 +89,5 @@ public:
 
 	static MouseModule* create() { return new MouseModule(); }
 
+	JUCE_DECLARE_WEAK_REFERENCEABLE(MouseModule)
 };

@@ -79,7 +79,7 @@ AjazzDevice::AjazzDevice(hid_device* device, String serialNumber, String deviceP
 {
     if (pid == 0x6674 || pid == 0x1010 || pid == 0x1020 || pid == 0x3010) {
         modelName = "AKP153"; numRows = 3; numColumns = 5; numSideKeys = 3; numExtraButtons = 0;
-    } else if (pid == 0x1001 || pid == 0x1002 || pid == 0x1003 || pid == 0x3002 || pid == 0x3003) {
+    } else if (pid == 0x1001 || pid == 0x1002 || pid == 0x1003 || pid == 0x3001 || pid == 0x3002 || pid == 0x3003) {
         modelName = "AKP03"; numRows = 2; numColumns = 3; numSideKeys = 3; numExtraButtons = 3;
     } else if (pid == 0x3006 || pid == 0x3004 || pid == 0x3013) {
         modelName = "AKP05"; numRows = 2; numColumns = 5; numSideKeys = 4; numExtraButtons = 0;

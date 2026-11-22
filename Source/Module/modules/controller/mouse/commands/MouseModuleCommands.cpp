@@ -33,6 +33,10 @@ MouseModuleCommands::MouseModuleCommands(MouseModule* _module, CommandContext co
 	{
 		buttonID = addEnumParameter("Button", "The button to simulate the event to");
 		buttonID->addOption("Left", 0)->addOption("Middle", 1)->addOption("Right", 2);
+#if JUCE_MAC
+		for (int i = 4; i <= 32; ++i)
+			buttonID->addOption("Button " + String(i), i - 1);
+#endif
 	}
 	break;
 

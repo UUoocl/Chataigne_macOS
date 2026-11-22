@@ -80,7 +80,25 @@ KeyboardModule::KeyboardModule() :
 		BoolParameter* p = new BoolParameter(s, "Is this key pressed ?", false);
 		p->setCustomShortName(sn);
 		keysCC.addParameter(p);
+#if JUCE_MAC
+		keyMap.set(i, p);
+#endif
 	}
+
+#if JUCE_MAC
+	macKeyboardTap = std::make_unique<keyboardmac::MacKeyboardTap>();
+	WeakReference<KeyboardModule> weakThis(this);
+	macKeyboardTapActive = macKeyboardTap->start([weakThis](const keyboardmac::KeyEvent& ev)
+	{
+		MessageManager::callAsync([weakThis, ev]()
+		{
+			if (weakThis != nullptr)
+				weakThis->macKeyChanged(ev);
+		});
+	});
+	if (!macKeyboardTapActive)
+		NLOGWARNING(niceName, "Could not create macOS CGEventTap for global keyboard listening (check Input Monitoring / Accessibility permissions).");
+#endif
 #endif
 
 	valuesCC.addChildControllableContainer(&keysCC);
@@ -96,6 +114,14 @@ KeyboardModule::~KeyboardModule()
 #if JUCE_WINDOWS
 	if (KeyboardHooker::getInstanceWithoutCreating() != nullptr) KeyboardHooker::getInstance()->removeListener(this);
 #else
+#if JUCE_MAC
+	if (macKeyboardTap != nullptr)
+	{
+		macKeyboardTap->stop();
+		macKeyboardTap.reset();
+	}
+	macKeyboardTapActive = false;
+#endif
 	if (window != nullptr) window->removeKeyListener(this);
 #endif
 }
@@ -223,9 +249,79 @@ void KeyboardModule::keyChanged(int keyCode, bool pressed)
 
 #else
 
+#if JUCE_MAC
+void KeyboardModule::macKeyChanged(const keyboardmac::KeyEvent& ev)
+{
+	if (!enabled->boolValue()) return;
+
+	const bool isCtrl = (ev.flags & kCGEventFlagMaskControl) != 0;
+	const bool isShift = (ev.flags & kCGEventFlagMaskShift) != 0;
+	const bool isCmd = (ev.flags & kCGEventFlagMaskCommand) != 0;
+	const bool isAlt = (ev.flags & kCGEventFlagMaskAlternate) != 0;
+
+	ctrl->setValue(isCtrl);
+	shift->setValue(isShift);
+	command->setValue(isCmd);
+	alt->setValue(isAlt);
+
+	if (ev.type == 2) // flagsChanged
+	{
+		inActivityTrigger->trigger();
+		return;
+	}
+
+	int ascii = 0;
+	String keyName;
+	if (ev.unicodeLen > 0 && ev.unicodeChar >= 33 && ev.unicodeChar < 127)
+	{
+		ascii = (int)ev.unicodeChar;
+		keyName = String::charToString((juce_wchar)ev.unicodeChar);
+	}
+	else
+	{
+		ascii = keyboardmac::cgKeyCodeToAscii(ev.cgKeyCode);
+		keyName = keyboardmac::cgKeyCodeToName(ev.cgKeyCode);
+	}
+
+	int upperAscii = (ascii >= 'a' && ascii <= 'z') ? (ascii - 32) : ascii;
+	const bool pressed = (ev.type == 0);
+
+	if (logIncomingData->boolValue())
+		NLOG(niceName, "Key " << String(pressed ? "pressed" : "released") << " : " << keyName << " (cgKeyCode : " << (int)ev.cgKeyCode << ")");
+
+	if (upperAscii >= 33 && upperAscii < 127 && keyMap.contains(upperAscii))
+		keyMap[upperAscii]->setValue(pressed);
+
+	if (pressed)
+	{
+		lastKey->setValue(keyName.toLowerCase());
+		lastKeyCode->setValue(upperAscii > 0 ? upperAscii : (int)ev.cgKeyCode);
+
+		StringArray comboParts;
+		if (isCtrl) comboParts.add("ctrl");
+		if (isAlt) comboParts.add("alt");
+		if (isShift) comboParts.add("shift");
+		if (isCmd) comboParts.add("command");
+		comboParts.add(keyName);
+		combination->setValue(comboParts.joinIntoString(" + "));
+	}
+	else
+	{
+		lastKey->setValue("");
+		lastKeyCode->setValue(-1);
+		combination->setValue("");
+	}
+
+	inActivityTrigger->trigger();
+}
+#endif
+
 bool KeyboardModule::keyPressed(const KeyPress& key, juce::Component* originatingComponent)
 {
 	if (!enabled->boolValue()) return false;
+#if JUCE_MAC
+	if (macKeyboardTapActive) return false;
+#endif
 
 	char k = (char)key.getTextCharacter();
 	String ks = String::fromUTF8(&k, 1);
@@ -247,6 +343,9 @@ bool KeyboardModule::keyPressed(const KeyPress& key, juce::Component* originatin
 bool KeyboardModule::keyStateChanged(bool isKeyDown, juce::Component* originatingComponent)
 {
 	if (!enabled->boolValue()) return false;
+#if JUCE_MAC
+	if (macKeyboardTapActive) return false;
+#endif
 
 	for (int i = 33; i < 127; i++)
 	{

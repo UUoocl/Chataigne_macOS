@@ -12,6 +12,10 @@
 
 using namespace juce;
 
+#if JUCE_MAC
+namespace keyboardmac { struct KeyEvent; class MacKeyboardTap; }
+#endif
+
 class KeyboardModule :
 	public Module
 #if JUCE_WINDOWS
@@ -46,6 +50,11 @@ public:
 	void keyChanged(int keyCode, bool pressed);
 
 #else
+#if JUCE_MAC
+	void macKeyChanged(const keyboardmac::KeyEvent& ev);
+	std::unique_ptr<keyboardmac::MacKeyboardTap> macKeyboardTap;
+	bool macKeyboardTapActive = false;
+#endif
 	virtual bool keyPressed(const KeyPress& key, Component* originatingComponent) override;
 	virtual bool keyStateChanged(bool isKeyDown, Component* originatingComponent) override;
 #endif
@@ -53,5 +62,5 @@ public:
 	static KeyboardModule * create() { return new KeyboardModule(); }
 	virtual String getDefaultTypeString() const override { return "Keyboard"; }
 
-
+	JUCE_DECLARE_WEAK_REFERENCEABLE(KeyboardModule)
 };

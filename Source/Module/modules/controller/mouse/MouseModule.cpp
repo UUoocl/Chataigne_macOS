@@ -43,6 +43,9 @@
 
 MouseModule::MouseModule() :
 	Module(getTypeString())
+#if JUCE_MAC
+	, macExtraButtonsCC("Extra Buttons")
+#endif
 {
 	setupIOConfiguration(true, true);
 
@@ -60,12 +63,32 @@ MouseModule::MouseModule() :
 	wheelXData = valuesCC.addTrigger("Wheel Data - Horizontal", "Has data been received from the horizontal mouse wheel?");
 	extraButton1 = valuesCC.addBoolParameter("Extra button 1", "Is extra button 1 down ?", false);
 	extraButton2 = valuesCC.addBoolParameter("Extra button 2", "Is extra button 2 down ?", false);
+#if JUCE_MAC
+	macExtraButtonsCC.editorIsCollapsed = true;
+	valuesCC.addChildControllableContainer(&macExtraButtonsCC, true);
+	for (int i = 4; i <= 32; ++i)
+		macExtraButtons.add(macExtraButtonsCC.addBoolParameter("Button " + String(i), "Is mouse button " + String(i) + " down ?", false));
+#endif
 
 
 #if JUCE_WINDOWS
 	MouseHooker::getInstance()->addListener(this);
 #else
 	Desktop::getInstance().addGlobalMouseListener(this);
+#if JUCE_MAC
+	macButtonTap = std::make_unique<mousemac::MacMouseButtonTap>();
+	WeakReference<MouseModule> weakThis(this);
+	macButtonTapActive = macButtonTap->start([weakThis](int buttonNumber, bool pressed)
+	{
+		MessageManager::callAsync([weakThis, buttonNumber, pressed]()
+		{
+			if (weakThis != nullptr)
+				weakThis->macMouseButtonChanged(buttonNumber, pressed);
+		});
+	});
+	if (!macButtonTapActive)
+		NLOGWARNING(niceName, "Could not create macOS CGEventTap for extra mouse buttons (check Input Monitoring / Accessibility permissions).");
+#endif
 #endif
 
 	defManager->add(CommandDefinition::createDef(this, "", "Set Cursor Pos", &MouseModuleCommands::create)->addParam("type", MouseModuleCommands::SET_CURSOR_POSITION));
@@ -87,6 +110,14 @@ void MouseModule::clearItem()
 #if JUCE_WINDOWS
 	if(MouseHooker::getInstanceWithoutCreating() != nullptr) MouseHooker::getInstance()->removeListener(this);
 #else
+#if JUCE_MAC
+	if (macButtonTap != nullptr)
+	{
+		macButtonTap->stop();
+		macButtonTap.reset();
+	}
+	macButtonTapActive = false;
+#endif
 	Desktop::getInstance().removeGlobalMouseListener(this);
 #endif
 
@@ -138,6 +169,13 @@ void MouseModule::setButtonDown(int buttonID)
 {
 	if (!enabled->boolValue()) return;
 	outActivityTrigger->trigger();
+#if JUCE_MAC
+	if (buttonID >= 3 && buttonID < 32)
+	{
+		sendButtonEvent(kCGEventOtherMouseDown, buttonID);
+		return;
+	}
+#endif
 	sendButtonEvent(buttonID == 0 ? LEFT_DOWN : (buttonID == 1 ? MIDDLE_DOWN : RIGHT_DOWN));
 }
 
@@ -145,6 +183,13 @@ void MouseModule::setButtonUp(int buttonID)
 {
 	if (!enabled->boolValue()) return;
 	outActivityTrigger->trigger();
+#if JUCE_MAC
+	if (buttonID >= 3 && buttonID < 32)
+	{
+		sendButtonEvent(kCGEventOtherMouseUp, buttonID);
+		return;
+	}
+#endif
 	sendButtonEvent(buttonID == 0 ? LEFT_UP : (buttonID == 1 ? MIDDLE_UP : RIGHT_UP));
 }
 
@@ -155,7 +200,7 @@ void MouseModule::setButtonClick(int buttonID)
 	setButtonUp(buttonID);
 }
 
-void MouseModule::sendButtonEvent(int buttonEvent)
+void MouseModule::sendButtonEvent(int buttonEvent, int buttonNumber)
 {
 	if (!enabled->boolValue()) return;
 
@@ -167,7 +212,7 @@ void MouseModule::sendButtonEvent(int buttonEvent)
 	::SendInput(1, &Input, sizeof(INPUT));
 #elif JUCE_MAC
 	juce::Point<float> pos = Desktop::getInstance().getMainMouseSource().getScreenPosition();
-	mousemac::sendMouseEvent(buttonEvent, pos.x, pos.y);
+	mousemac::sendMouseEvent(buttonEvent, pos.x, pos.y, buttonNumber);
 #endif
 }
 
@@ -208,9 +253,35 @@ void MouseModule::mouseWheelChanged(int wheelDelta, bool horizontal)
 	if (logIncomingData->boolValue()) NLOG(niceName, (horizontal ? "Horizontal" : "Vertical") << " wheel delta " << delta);
 }
 #else
+#if JUCE_MAC
+void MouseModule::macMouseButtonChanged(int buttonNumber, bool pressed)
+{
+	if (!enabled->boolValue()) return;
+	if (logIncomingData->boolValue())
+		NLOG(niceName, "Mouse button " << (buttonNumber + 1) << " " << (pressed ? "down" : "up"));
+
+	inActivityTrigger->trigger();
+	if (buttonNumber == 0) leftButtonDown->setValue(pressed);
+	else if (buttonNumber == 1) rightButtonDown->setValue(pressed);
+	else if (buttonNumber == 2) middleButtonDown->setValue(pressed);
+	else if (buttonNumber == 3) extraButton1->setValue(pressed);
+	else if (buttonNumber == 4) extraButton2->setValue(pressed);
+
+	if (buttonNumber >= 3 && buttonNumber < 32)
+	{
+		const int extraIdx = buttonNumber - 3;
+		if (isPositiveAndBelow(extraIdx, macExtraButtons.size()))
+			macExtraButtons[extraIdx]->setValue(pressed);
+	}
+}
+#endif
+
 void MouseModule::mouseDown(const MouseEvent& e)
 {
 	if (!enabled->boolValue()) return;
+#if JUCE_MAC
+	if (macButtonTapActive) return;
+#endif
 
 	inActivityTrigger->trigger();
 	leftButtonDown->setValue(e.mods.isLeftButtonDown());
@@ -222,6 +293,9 @@ void MouseModule::mouseDown(const MouseEvent& e)
 void MouseModule::mouseUp(const MouseEvent& e)
 {
 	if (!enabled->boolValue()) return;
+#if JUCE_MAC
+	if (macButtonTapActive) return;
+#endif
 
 	inActivityTrigger->trigger();
 	leftButtonDown->setValue(false);

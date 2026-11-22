@@ -46,6 +46,7 @@ void AjazzManager::run()
 		{ 0x0300, 0x1003 },
 		{ 0x0300, 0x3002 },
 		{ 0x0300, 0x3003 },
+		{ 0x1500, 0x3001 }, // Soomfon Stream Controller
 
 		// AKP05 Series (10 buttons, 4 knobs/screens)
 		{ 0x0300, 0x3006 },
