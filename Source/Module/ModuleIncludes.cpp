@@ -53,6 +53,14 @@
 #include "modules/audio/AudioModule.cpp"
 #include "modules/audio/speech/SpeechToTextModule.cpp"
 #include "modules/audio/speech/commands/SpeechToTextCommand.cpp"
+
+#include "modules/nlp/SentimentModule.cpp"
+#include "modules/nlp/commands/SentimentCommand.cpp"
+
+#include "modules/vision/VisionBaseModule.cpp"
+#include "modules/vision/VisionPoseModule.cpp"
+#include "modules/vision/VisionFaceModule.cpp"
+#include "modules/vision/VisionHandsModule.cpp"
 #include "modules/audio/analysis/FFTAnalyzer.cpp"
 #include "modules/audio/analysis/FFTAnalyzerManager.cpp"
 #include "modules/audio/analysis/ui/FFTAnalyzerEditor.cpp"

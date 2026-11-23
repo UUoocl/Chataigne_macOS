@@ -35,6 +35,9 @@ ModuleFactory::ModuleFactory() {
 
 	defs.add(new ModuleDefinition("Hardware", "Sound Card", &AudioModule::create));
 	defs.add(new ModuleDefinition("Hardware", "Speech to Text", &SpeechToTextModule::create));
+	defs.add(new ModuleDefinition("Hardware", "Vision Pose", &VisionPoseModule::create));
+	defs.add(new ModuleDefinition("Hardware", "Vision Face", &VisionFaceModule::create));
+	defs.add(new ModuleDefinition("Hardware", "Vision Hands", &VisionHandsModule::create));
 	defs.add(new ModuleDefinition("Hardware", "Buttplug", &ButtplugModule::create));
 	defs.add(new ModuleDefinition("Video", "Video monitor out", &VideoMonitorOutModule::create));
 	defs.add(new ModuleDefinition("Video", "NDI out", &NDIOutModule::create));
@@ -71,6 +74,7 @@ ModuleFactory::ModuleFactory() {
 
 	defs.add(new ModuleDefinition("System", "Time", &TimeModule::create));
 	defs.add(new ModuleDefinition("System", "OS", &OSModule::create));
+	defs.add(new ModuleDefinition("System", "Sentiment Analysis", &SentimentModule::create));
 
 	defs.add(new ModuleDefinition("Custom", "Empty", &EmptyModule::create));
 

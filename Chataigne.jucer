@@ -879,6 +879,44 @@
                     file="Source/Module/modules/audio/speech/SpeechToTextModule.h"/>
             </GROUP>
           </GROUP>
+          <GROUP id="{F1A2B3C4-1111-2222-3333-444455556668}" name="nlp">
+            <GROUP id="{F1A2B3C4-1111-2222-3333-444455556669}" name="commands">
+              <FILE id="nlCmdC" name="SentimentCommand.cpp" compile="0" resource="0"
+                    file="Source/Module/modules/nlp/commands/SentimentCommand.cpp"/>
+              <FILE id="nlCmdH" name="SentimentCommand.h" compile="0" resource="0"
+                    file="Source/Module/modules/nlp/commands/SentimentCommand.h"/>
+            </GROUP>
+            <FILE id="nlBrgH" name="SentimentBridge.h" compile="0" resource="0"
+                  file="Source/Module/modules/nlp/SentimentBridge.h"/>
+            <FILE id="nlBrgM" name="SentimentBridge_mac.mm" compile="1" resource="0"
+                  file="Source/Module/modules/nlp/SentimentBridge_mac.mm"/>
+            <FILE id="nlModC" name="SentimentModule.cpp" compile="0" resource="0"
+                  file="Source/Module/modules/nlp/SentimentModule.cpp"/>
+            <FILE id="nlModH" name="SentimentModule.h" compile="0" resource="0"
+                  file="Source/Module/modules/nlp/SentimentModule.h"/>
+          </GROUP>
+          <GROUP id="{F1A2B3C4-1111-2222-3333-444455556670}" name="vision">
+            <FILE id="vsBrgH" name="VisionBridge.h" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionBridge.h"/>
+            <FILE id="vsBrgM" name="VisionBridge_mac.mm" compile="1" resource="0"
+                  file="Source/Module/modules/vision/VisionBridge_mac.mm"/>
+            <FILE id="vsBaseC" name="VisionBaseModule.cpp" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionBaseModule.cpp"/>
+            <FILE id="vsBaseH" name="VisionBaseModule.h" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionBaseModule.h"/>
+            <FILE id="vsPoseC" name="VisionPoseModule.cpp" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionPoseModule.cpp"/>
+            <FILE id="vsPoseH" name="VisionPoseModule.h" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionPoseModule.h"/>
+            <FILE id="vsFaceC" name="VisionFaceModule.cpp" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionFaceModule.cpp"/>
+            <FILE id="vsFaceH" name="VisionFaceModule.h" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionFaceModule.h"/>
+            <FILE id="vsHandC" name="VisionHandsModule.cpp" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionHandsModule.cpp"/>
+            <FILE id="vsHandH" name="VisionHandsModule.h" compile="0" resource="0"
+                  file="Source/Module/modules/vision/VisionHandsModule.h"/>
+          </GROUP>
           <GROUP id="{01EC461B-4BC5-C8F7-D379-477B101B8032}" name="common">
             <GROUP id="{02AAA11C-8317-81E2-F032-E3F693C64077}" name="osc">
               <FILE id="nOD91Y" name="IOSCSenderModule.h" compile="0" resource="0"
@@ -1888,7 +1926,7 @@
       </MODULEPATHS>
     </VS2022>
     <XCODE_MAC targetFolder="Builds/MacOSX" smallIcon="nVz6Li" bigIcon="nVz6Li"
-               extraFrameworks="IOBluetooth, ForceFeedback, IOKit, Speech" documentExtensions="noisette"
+               extraFrameworks="IOBluetooth, ForceFeedback, IOKit, Speech, Vision, NaturalLanguage" documentExtensions="noisette"
                customPList="&lt;plist&gt;&#10;&lt;dict&gt;&#10;&lt;key&gt;NSBluetoothAlwaysUsageDescription&lt;/key&gt;&#10;&lt;string&gt;Chataigne uses Bluetooth to connect Wii Remotes and Joy-Con controllers.&lt;/string&gt;&#10;&lt;key&gt;NSBluetoothPeripheralUsageDescription&lt;/key&gt;&#10;&lt;string&gt;Chataigne uses Bluetooth to connect controllers.&lt;/string&gt;&#10;&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;&#10;&#9;&lt;dict&gt;&#10;&#9;&#9;&lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;&#10;&#9;&#9;&lt;true/&gt;&#10;&#9;&lt;/dict&gt;&#10;&lt;/dict&gt;&#10;&lt;/plist&gt;"
                externalLibraries="Servus&#10;mosquitto&#10;mosquittopp&#10;mpv"
                microphonePermissionNeeded="1" hardenedRuntimeOptions="com.apple.security.cs.allow-jit,com.apple.security.device.audio-input"
@@ -2041,7 +2079,7 @@
     <XCODE_MAC targetFolder="Builds/MacOSX_CI" externalLibraries="Servus&#10;mpv"
                smallIcon="nVz6Li" bigIcon="nVz6Li" hardenedRuntimeOptions="com.apple.security.cs.allow-jit"
                customPList="&lt;plist&gt;&#10;&lt;dict&gt;&#10;&lt;key&gt;NSBluetoothAlwaysUsageDescription&lt;/key&gt;&#10;&lt;string&gt;Chataigne uses Bluetooth to connect Wii Remotes and Joy-Con controllers.&lt;/string&gt;&#10;&lt;key&gt;NSBluetoothPeripheralUsageDescription&lt;/key&gt;&#10;&lt;string&gt;Chataigne uses Bluetooth to connect controllers.&lt;/string&gt;&#10;&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;&#10;&#9;&lt;dict&gt;&#10;&#9;&#9;&lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;&#10;&#9;&#9;&lt;true/&gt;&#10;&#9;&lt;/dict&gt;&#10;&lt;/dict&gt;&#10;&lt;/plist&gt;"
-               microphonePermissionNeeded="1" extraFrameworks="IOBluetooth, ForceFeedback, IOKit, Speech"
+               microphonePermissionNeeded="1" extraFrameworks="IOBluetooth, ForceFeedback, IOKit, Speech, Vision, NaturalLanguage"
                documentExtensions="noisette" extraDefs="JUCE_SUPPORT_CARBON=0&#10;JUCE_COREGRAPHICS_DRAW_ASYNC=1&#10;USE_ABLETONLINK=1&#10;LINK_PLATFORM_MACOSX=1"
                xcodeValidArchs="arm64,x86_64" frameworkSearchPaths="../../External/sdl/lib/osx&#10;../../External/syphon"
                embeddedFrameworks="../../External/sdl/lib/osx/SDL2.framework&#10;../../External/syphon/Syphon.framework">

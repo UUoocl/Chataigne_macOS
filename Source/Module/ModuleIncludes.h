@@ -43,6 +43,16 @@
 #include "modules/audio/speech/SpeechToTextModule.h"
 #include "modules/audio/speech/commands/SpeechToTextCommand.h"
 
+#include "modules/nlp/SentimentBridge.h"
+#include "modules/nlp/SentimentModule.h"
+#include "modules/nlp/commands/SentimentCommand.h"
+
+#include "modules/vision/VisionBridge.h"
+#include "modules/vision/VisionBaseModule.h"
+#include "modules/vision/VisionPoseModule.h"
+#include "modules/vision/VisionFaceModule.h"
+#include "modules/vision/VisionHandsModule.h"
+
 #include "modules/audio/analysis/ui/FFTAnalyzerEditor.h"
 #include "modules/audio/analysis/ui/FFTAnalyzerManagerEditor.h"
 
