@@ -4,6 +4,7 @@
   "path": "System",
   "version": "1.0.0",
   "description": "Trigger macOS Apple Shortcuts via /usr/bin/shortcuts and receive JSON results over WebSocket",
+  "url": "https://github.com/UUoocl/Shortcuts-Chataigne-Module",
   "hasInput": true,
   "hasOutput": true,
   "hideDefaultCommands": true,

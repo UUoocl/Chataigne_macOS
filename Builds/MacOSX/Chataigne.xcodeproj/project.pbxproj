@@ -105,6 +105,8 @@
 		A10000020000000000000002 /* UVCController.m */ = {isa = PBXBuildFile; fileRef = B10000020000000000000002; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A10000030000000000000003 /* UVCType.m */ = {isa = PBXBuildFile; fileRef = B10000030000000000000003; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A10000040000000000000004 /* UVCValue.m */ = {isa = PBXBuildFile; fileRef = B10000040000000000000004; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A10000050000000000000005 /* SpeechBridge_mac.mm */ = {isa = PBXBuildFile; fileRef = B10000050000000000000005; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		A10000060000000000000006 /* Speech.framework */ = {isa = PBXBuildFile; fileRef = B10000060000000000000006; };
 		FD19F583BBB5C52996F26DB0 /* wiiboard.c */ = {isa = PBXBuildFile; fileRef = 6AB115D848E1553D7F5C50B6; };
 		FFBC11E7EE94DC34D717AD69 /* WebKit.framework */ = {isa = PBXBuildFile; fileRef = F36349200785EF7B0D1E7329; };
 /* End PBXBuildFile section */
@@ -221,6 +223,8 @@
 		B10000020000000000000002 /* UVCController.m */ /* UVCController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UVCController.m; path = ../../Source/Module/modules/controller/uvc/lib/UVCControllerCore/UVCController.m; sourceTree = SOURCE_ROOT; };
 		B10000030000000000000003 /* UVCType.m */ /* UVCType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UVCType.m; path = ../../Source/Module/modules/controller/uvc/lib/UVCControllerCore/UVCType.m; sourceTree = SOURCE_ROOT; };
 		B10000040000000000000004 /* UVCValue.m */ /* UVCValue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UVCValue.m; path = ../../Source/Module/modules/controller/uvc/lib/UVCControllerCore/UVCValue.m; sourceTree = SOURCE_ROOT; };
+		B10000050000000000000005 /* SpeechBridge_mac.mm */ /* SpeechBridge_mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = SpeechBridge_mac.mm; path = ../../Source/Module/modules/audio/speech/SpeechBridge_mac.mm; sourceTree = SOURCE_ROOT; };
+		B10000060000000000000006 /* Speech.framework */ /* Speech.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Speech.framework; path = System/Library/Frameworks/Speech.framework; sourceTree = SDKROOT; };
 		1F3CEEAEBD28A89F449A06F3 /* LoupedeckModule.cpp */ /* LoupedeckModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LoupedeckModule.cpp; path = ../../Source/Module/modules/controller/loupedeck/LoupedeckModule.cpp; sourceTree = SOURCE_ROOT; };
 		1FC22E16506F967E05CD4819 /* MorphTargetUI.cpp */ /* MorphTargetUI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MorphTargetUI.cpp; path = ../../Source/CustomVariables/Preset/Morpher/ui/MorphTargetUI.cpp; sourceTree = SOURCE_ROOT; };
 		203B23CC8571848A67B12459 /* HTTPCommand.cpp */ /* HTTPCommand.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HTTPCommand.cpp; path = ../../Source/Module/modules/http/commands/HTTPCommand.cpp; sourceTree = SOURCE_ROOT; };
@@ -1017,6 +1021,7 @@
 				C8E81ADA56D6A25E4AD7C918,
 				C949C1C9D8B0825FC3C6E97D,
 				FFBC11E7EE94DC34D717AD69,
+				A10000060000000000000006,
 				E3C637EEBA5139218230D444,
 				929BBF2871F7A7823334D2DE,
 				C6EDEE52606D81949D455AF7,
@@ -3783,6 +3788,7 @@
 				A10000020000000000000002,
 				A10000030000000000000003,
 				A10000040000000000000004,
+				A10000050000000000000005,
 				4ACACCD0579323DDC1DBE7D9,
 				8670FDE2A6F8AE20A18D48AD,
 				733770874198A88DEBACE61E,

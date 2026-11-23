@@ -39,6 +39,9 @@
 #include "modules/audio/analysis/FFTAnalyzerManager.h"
 
 #include "modules/audio/AudioModule.h"
+#include "modules/audio/speech/SpeechBridge.h"
+#include "modules/audio/speech/SpeechToTextModule.h"
+#include "modules/audio/speech/commands/SpeechToTextCommand.h"
 
 #include "modules/audio/analysis/ui/FFTAnalyzerEditor.h"
 #include "modules/audio/analysis/ui/FFTAnalyzerManagerEditor.h"

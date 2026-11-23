@@ -16,6 +16,8 @@
     <string>This app requires audio input. If you do not have an audio interface connected it will use the built-in microphone.</string>
     <key>NSAppleEventsUsageDescription</key>
     <string>Chataigne uses Apple Events to control macOS applications such as Keynote.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Chataigne uses Apple Speech Recognition for local speech-to-text transcription.</string>
     <key>CFBundleExecutable</key>
     <string>${EXECUTABLE_NAME}</string>
     <key>CFBundleIconFile</key>

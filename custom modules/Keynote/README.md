@@ -5,14 +5,14 @@ A Chataigne custom module based on the `OS` module that controls Apple Keynote v
 ## Architecture
 
 ```
-Chataigne (Keynote / OS Module)
+Chataigne (Apple Shortcuts / OS Module)
   │  local.launchProcess(fullCmd, 0)  [non-blocking background thread]
   ▼
-/usr/bin/python3  (hex-encoded bootstrap & JXA args)
-  ├──▶ /usr/bin/osascript -l JavaScript  ──▶ Apple Keynote (JXA / Apple Events)
-  │         └── returns JSON slide state + "|||||" shape key/value pairs
-  └──▶ RFC-6455 WebSocket client (stdlib socket)
-            └── sends JSON text frame + Close frame (0x88)
+/usr/bin/python3  (hex-encoded bootstrap & packed args)
+  ├──▶ /usr/bin/shortcuts run  
+  │         └── captures stdout & parses JSON if valid
+  └──▶ WebSocket client (stdlib socket)
+            └── sends JSON text frame + Close frame
                   ▼
 Chataigne (WebSocket Server, Protocol: JSON)
   └── parses JSON into live Chataigne Values

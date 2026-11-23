@@ -34,6 +34,7 @@ ModuleFactory::ModuleFactory() {
 #endif
 
 	defs.add(new ModuleDefinition("Hardware", "Sound Card", &AudioModule::create));
+	defs.add(new ModuleDefinition("Hardware", "Speech to Text", &SpeechToTextModule::create));
 	defs.add(new ModuleDefinition("Hardware", "Buttplug", &ButtplugModule::create));
 	defs.add(new ModuleDefinition("Video", "Video monitor out", &VideoMonitorOutModule::create));
 	defs.add(new ModuleDefinition("Video", "NDI out", &NDIOutModule::create));

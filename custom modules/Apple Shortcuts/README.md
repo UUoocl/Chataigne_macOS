@@ -9,10 +9,10 @@ Chataigne (Apple Shortcuts / OS Module)
   │  local.launchProcess(fullCmd, 0)  [non-blocking background thread]
   ▼
 /usr/bin/python3  (hex-encoded bootstrap & packed args)
-  ├──▶ /usr/bin/shortcuts run / list  (temp files for --input-path / --output-path)
-  │         └── captures stdout / output file & parses JSON if valid
-  └──▶ RFC-6455 WebSocket client (stdlib socket)
-            └── sends JSON text frame + Close frame (0x88)
+  ├──▶ /usr/bin/shortcuts run  
+  │         └── captures stdout & parses JSON if valid
+  └──▶ WebSocket client (stdlib socket)
+            └── sends JSON text frame + Close frame
                   ▼
 Chataigne (WebSocket Server, Protocol: JSON)
   └── parses JSON into live Chataigne Values
