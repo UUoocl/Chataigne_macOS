@@ -2,6 +2,16 @@
 Artist-friendly Modular Machine for Art and Technology
 Official website : https://benjamin.kuperberg.fr/chataigne
 
+## Fork Features
+
+- MacOS Only Features
+  - Local Speech-to-Text via Apple Speech API 
+  - Global Keyboard input monitoring
+  - Global Mouse input monitoring with extra button support
+  - USB Camera control, including Pan, Tilt, and Zoom
+
+- Added support for Ajazz (AKP) device variant Soomfon
+  
 ### Intro
 
 Chataigne is made with one goal in mind : create a common tool for artists, technicians and developers who wish to use technology and synchronize softwares for shows, interactive installations or prototyping.
